@@ -14,3 +14,12 @@ if __name__ == '__main__':
     host = '127.0.0.1'
 
     uvicorn.run('main:app', host=host, port=port, log_level='info', reload=True)
+
+
+    #uvicorn workoutapi.main:app --reload
+    
+    #create-migrations
+    #PYTHONPATH=$PYTHONPATH:$(pwd) alembic revision --autogenerate -m $(d)
+
+    #run-migrations
+    #PYTHONPATH=$PYTHONPATH:$(pwd) alembic upgrade head
