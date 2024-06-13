@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "workoutapi"
+name = "WorkOutAPI"
 version = "0.1.0"
 description = ""
-authors = ["Fabrício Dos Santos Moreira <fabriciodossantosmoreira230305@gmail.com>"]
+authors = ["Fabrício Dos Santos Moreira <None>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
