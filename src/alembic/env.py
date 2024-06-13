@@ -1,6 +1,8 @@
 import asyncio
 from logging.config import fileConfig
 
+from sqlalchemy.dialects.postgresql.asyncpg import *
+
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from sqlalchemy import pool
