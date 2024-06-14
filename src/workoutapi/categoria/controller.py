@@ -1,6 +1,6 @@
 from uuid import uuid4
 from fastapi import APIRouter, Body, HTTPException, status
-
+from sqlalchemy.exc import IntegrityError
 from pydantic import UUID4
 from workoutapi.categoria.models import CategoriaModel
 from workoutapi.categoria.schemas import CategoriaIn, CategoriaOut
@@ -8,6 +8,10 @@ from workoutapi.categoria.schemas import CategoriaIn, CategoriaOut
 from workoutapi.contrib.dependencies import DataBaseDependency
 
 from sqlalchemy.future import select
+
+
+from fastapi_pagination.ext.sqlalchemy import paginate
+from fastapi_pagination import Page
 
 
 router = APIRouter()
@@ -25,13 +29,35 @@ async def post(
     categoria_in: CategoriaIn = Body(...)
 ) -> CategoriaOut:
     
-    categoria_out = CategoriaOut(id=uuid4(), **categoria_in.model_dump())
-    categoria_model = CategoriaModel(**categoria_out.model_dump())
+    try:
+        categoria_out = CategoriaOut(id=uuid4(), **categoria_in.model_dump())
+        categoria_model = CategoriaModel(**categoria_out.model_dump())
     
-    db_session.add(categoria_model)
-    await db_session.commit()
+        db_session.add(categoria_model)
+        await db_session.commit()
+
+    except IntegrityError as e:
+        raise HTTPException(
+            status_code=status.HTTP_303_SEE_OTHER,
+            detail=f'Já existe uma Categoria com o nome: {categoria_in.nome}'
+        )
+    
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f'Ocorreu um erro ao inserir os dados no banco'
+        )
 
     return categoria_out
+
+
+
+
+
+
+
+
+
 
 
 
@@ -39,13 +65,18 @@ async def post(
         path='/',
         summary='Consultar todas as Categorias',
         status_code=status.HTTP_200_OK,
-        response_model=list[CategoriaOut],
+        response_model=Page[CategoriaOut],
 
 )
-async def query(db_session: DataBaseDependency) -> list[CategoriaOut]:
-    categorias: list[CategoriaOut] = (await db_session.execute(select(CategoriaModel))).scalars().all()
+async def query(db_session: DataBaseDependency) -> Page[CategoriaOut]:
+
+    return await paginate(db_session, select(CategoriaModel))
+
+
+
+    #categorias: list[CategoriaOut] = (await db_session.execute(select(CategoriaModel))).scalars().all()
    
-    return categorias
+    #return categorias
 
 
 @router.get(

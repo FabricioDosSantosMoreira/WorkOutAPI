@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 
 from workoutapi.routers import api_router
-
+from fastapi_pagination import Page, add_pagination
 app = FastAPI(title='WorkOutAPI')
 app.include_router(api_router)
-
+add_pagination(app)
 
 if __name__ == '__main__':
     import uvicorn

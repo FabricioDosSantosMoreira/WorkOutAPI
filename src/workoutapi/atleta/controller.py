@@ -1,19 +1,85 @@
-from typing import List
+from typing import Any, List, Optional
 from uuid import uuid4
-from fastapi import APIRouter, Body, HTTPException, status
+from fastapi import APIRouter, Body, HTTPException, Query, Request, status
+from fastapi.responses import JSONResponse
+from sqlalchemy.exc import IntegrityError
+
 
 from datetime import datetime, UTC
 from pydantic import UUID4
 from workoutapi.atleta.models import AtletaModel
-from workoutapi.atleta.schemas import AtletaIn, AtletaOut, AtletaUpdate
+from workoutapi.atleta.schemas import AtletaIn, AtletaOut, AtletaUpdate, AtletaGetAll
 from workoutapi.categoria.models import CategoriaModel
 from workoutapi.centro_treinamento.models import CentroTreinamentoModel
 from workoutapi.contrib.dependencies import DataBaseDependency
 
 from sqlalchemy.future import select
+from fastapi_pagination.ext.sqlalchemy import paginate
+from fastapi_pagination import Page
 
 
 router = APIRouter()
+
+
+
+
+
+@router.get(
+    path='/',
+    summary='Consultar todos os Atletas',
+    status_code=status.HTTP_200_OK,
+    response_model= Any
+) 
+async def query(
+    request: Request,
+    db_session: DataBaseDependency,
+    cpf: Optional[str] = Query(None, description='Filtrar por CPF do Atleta'),
+    nome: Optional[str] = Query(None, description='Filtrar por nome do Atleta')
+)-> Any:
+    
+    query = select(AtletaModel)
+
+    if cpf:
+        query = query.filter(AtletaModel.cpf == cpf)
+
+    if nome:
+        query = query.filter(AtletaModel.nome == nome)
+
+    atletas = (await db_session.execute(query)).scalars().all()
+
+    if not atletas:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, 
+            detail='Nenhum atleta encontrado com os critérios fornecidos'
+        )
+    
+    response_data = [
+        {
+            "id": str(atleta.id),  
+            "created_at": atleta.created_at.isoformat(),  
+            "nome": atleta.nome,
+            "centro_treinamento": atleta.centro_treinamento.nome,
+            "categoria": atleta.categoria.nome
+        }
+        for atleta in atletas
+    ]
+    
+    return JSONResponse(content=response_data)
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @router.post(
@@ -60,7 +126,14 @@ async def post(
 
         db_session.add(atleta_model)
         await db_session.commit()
-    except Exception: # a manipulação vai ser aq
+    
+    except IntegrityError as e:
+        raise HTTPException(
+            status_code=status.HTTP_303_SEE_OTHER,
+            detail=f'Já existe um atleta cadastrado com o cpf: {atleta_in.cpf}'
+        )
+    
+    except Exception as exc:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f'Ocorreu um erro ao inserir os dados no banco'
@@ -71,16 +144,28 @@ async def post(
 
 
 @router.get(
-    path='/',
-    summary='Consultar todos os Atletas',
+    path='/all',
+    summary='Consultar todos os Atletas com paginação',
     status_code=status.HTTP_200_OK,
-    response_model= List[AtletaOut]
+    response_model= Page[AtletaGetAll]
 ) 
-async def query(db_session: DataBaseDependency) -> List[AtletaOut]:
+async def query(
+    request: Request,
+    db_session: DataBaseDependency,
+    cpf: Optional[str] = Query(None, description='Filtrar por CPF do Atleta'),
+    nome: Optional[str] = Query(None, description='Filtrar por nome do Atleta')
+)-> Page[AtletaGetAll]:
+    
+    query = select(AtletaModel)
 
-    atletas: List[AtletaOut] = (await db_session.execute(select(AtletaModel))).scalars().all()
+    if cpf:
+        query = query.filter(AtletaModel.cpf == cpf)
 
-    return [AtletaOut.model_validate(atleta) for atleta in atletas]
+    if nome:
+        query = query.filter(AtletaModel.nome == nome)
+
+    return await paginate(db_session, query)
+
 
 
 
