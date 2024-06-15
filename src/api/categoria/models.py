@@ -10,3 +10,4 @@ class CategoriaModel(BaseModel):
     nome: Mapped[str] = mapped_column(String(11), unique=True, nullable=False)
     
     atleta: Mapped['AtletaModel'] = relationship(back_populates='categoria')
+    

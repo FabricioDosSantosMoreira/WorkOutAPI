@@ -41,19 +41,8 @@ class CentroTreinamentoOut(CentroTreinamentoIn):
     id: Annotated[UUID4, Field(description="Identificador do centro de treinamento")]
 
 
-class CentroTreinamentoAtleta(BaseSchema):
-    nome: Annotated[
-        str,
-        Field(
-            description="Nome do centro de treinamento",
-            example="CT Example",
-            max_length=20,
-        ),
-    ]
-
-
 class CentroTreinamentoUpdate(BaseSchema):
-        
+
     nome: Annotated[
         str,
         Field(
@@ -76,5 +65,16 @@ class CentroTreinamentoUpdate(BaseSchema):
             description="Proprietário do centro de treinamento",
             example="Roberto",
             max_length=30,
+        ),
+    ]
+
+
+class CentroTreinamentoAtleta(BaseSchema):
+    nome: Annotated[
+        str,
+        Field(
+            description="Nome do centro de treinamento",
+            example="CT Example",
+            max_length=20,
         ),
     ]

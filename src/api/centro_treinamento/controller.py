@@ -2,7 +2,11 @@ from typing import Any
 from uuid import uuid4
 
 from api.centro_treinamento.models import CentroTreinamentoModel
-from api.centro_treinamento.schemas import CentroTreinamentoIn, CentroTreinamentoOut, CentroTreinamentoUpdate
+from api.centro_treinamento.schemas import (
+    CentroTreinamentoIn,
+    CentroTreinamentoOut,
+    CentroTreinamentoUpdate,
+)
 from api.contrib.dependencies import DataBaseDependency
 from fastapi import APIRouter, Body, HTTPException, status
 from fastapi_pagination import Page
@@ -91,18 +95,19 @@ async def post(
     response_model=CentroTreinamentoOut,
 )
 async def query(
-    id: UUID4, db_session: DataBaseDependency, 
-    centro_treinamento_up: CentroTreinamentoUpdate = Body(...)
+    id: UUID4,
+    db_session: DataBaseDependency,
+    centro_treinamento_up: CentroTreinamentoUpdate = Body(...),
 ) -> CentroTreinamentoOut:
-    
+
     query = select(CentroTreinamentoModel).filter_by(id=id)
 
     result: CentroTreinamentoOut = (await db_session.execute(query)).scalars().first()
-   
+
     if not result:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, 
-            detail=f'Centro de treinamento não encontrado no Id: {id}'
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Centro de treinamento não encontrado no Id: {id}",
         )
 
     centro_treinamento_up = centro_treinamento_up.model_dump(exclude_unset=True)
@@ -116,23 +121,21 @@ async def query(
 
 
 @router.delete(
-    path='/{id}',
-    summary='Deletar um centro de treinamento por Id',
+    path="/{id}",
+    summary="Deletar um centro de treinamento por Id",
     status_code=status.HTTP_204_NO_CONTENT,
 )
-async def query(
-    id: UUID4, 
-    db_session: DataBaseDependency
-) -> None:
+async def query(id: UUID4, db_session: DataBaseDependency) -> None:
 
     query = select(CentroTreinamentoModel).filter_by(id=id)
 
     result: CentroTreinamentoOut = (await db_session.execute(query)).scalars().first()
-   
+
     if not result:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, 
-            detail=f'Centro de treinamento não encontrado no Id: {id}')
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Centro de treinamento não encontrado no Id: {id}",
+        )
 
     try:
         await db_session.delete(result)
@@ -142,7 +145,7 @@ async def query(
         await db_session.rollback()
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail='Impossível deletar um centro de treinamento que está relacionado a um atleta',
+            detail="Impossível deletar um centro de treinamento que está relacionado a um atleta",
         )
 
     return None

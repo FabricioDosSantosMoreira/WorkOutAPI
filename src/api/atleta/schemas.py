@@ -38,6 +38,7 @@ class AtletaUpdate(BaseSchema):
 class AtletaGetAll(OutMixin):
     nome: Annotated[str, Field(description='Nome do atleta', example='Anna')]
 
+    # nao é categoriain
     categoria: Annotated[CategoriaIn, Field(description='Categoria do atleta')]
 
     centro_treinamento: Annotated[CentroTreinamentoAtleta, Field(description='Centro de treinamento do atleta')]
