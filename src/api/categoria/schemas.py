@@ -6,9 +6,7 @@ from pydantic import UUID4, Field
 
 class Categoria(BaseSchema):
 
-    nome: Annotated[
-        str, Field(description="Nome da Categoria", example="Scale", max_length=10)
-    ]
+    nome: Annotated[str, Field(description="Nome da Categoria", example="Scale", max_length=10)]
 
 
 class CategoriaIn(Categoria):
@@ -22,13 +20,9 @@ class CategoriaOut(CategoriaIn):
 
 class CategoriaUpdate(BaseSchema):
 
-    nome: Annotated[
-        str, Field(description="Nome da Categoria", example="Scale", max_length=10)
-    ]
+    nome: Annotated[str, Field(description="Nome da Categoria", example="Scale", max_length=10)]
 
 
 class CategoriaAtleta(BaseSchema):
 
-    nome: Annotated[
-        str, Field(description="Nome da Categoria", example="Scale", max_length=10)
-    ]
+    nome: Annotated[str, Field(description="Nome da Categoria", example="Scale", max_length=10)]
