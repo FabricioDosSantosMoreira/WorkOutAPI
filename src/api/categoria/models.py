@@ -1,6 +1,6 @@
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from workoutapi.contrib.models import BaseModel
+from api.contrib.models import BaseModel
 
 
 class CategoriaModel(BaseModel):

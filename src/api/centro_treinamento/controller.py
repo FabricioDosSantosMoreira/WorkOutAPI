@@ -1,19 +1,15 @@
-from sqlalchemy.exc import IntegrityError
 from uuid import uuid4
+
+from api.centro_treinamento.models import CentroTreinamentoModel
+from api.centro_treinamento.schemas import (CentroTreinamentoIn,
+                                            CentroTreinamentoOut)
+from api.contrib.dependencies import DataBaseDependency
 from fastapi import APIRouter, Body, HTTPException, status
-
-from pydantic import UUID4
-from workoutapi.centro_treinamento.models import CentroTreinamentoModel
-from workoutapi.centro_treinamento.schemas import CentroTreinamentoIn, CentroTreinamentoOut
-
-
-from workoutapi.contrib.dependencies import DataBaseDependency
-
-from sqlalchemy.future import select
-
-from fastapi_pagination.ext.sqlalchemy import paginate
 from fastapi_pagination import Page
-
+from fastapi_pagination.ext.sqlalchemy import paginate
+from pydantic import UUID4
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.future import select
 
 router = APIRouter()
 

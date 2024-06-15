@@ -2,10 +2,10 @@ from uuid import uuid4
 from fastapi import APIRouter, Body, HTTPException, status
 from sqlalchemy.exc import IntegrityError
 from pydantic import UUID4
-from workoutapi.categoria.models import CategoriaModel
-from workoutapi.categoria.schemas import CategoriaIn, CategoriaOut
+from api.categoria.models import CategoriaModel
+from api.categoria.schemas import CategoriaIn, CategoriaOut
 
-from workoutapi.contrib.dependencies import DataBaseDependency
+from api.contrib.dependencies import DataBaseDependency
 
 from sqlalchemy.future import select
 

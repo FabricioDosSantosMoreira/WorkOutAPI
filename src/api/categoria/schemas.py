@@ -1,4 +1,4 @@
-from workoutapi.contrib.schemas import BaseSchema
+from api.contrib.schemas import BaseSchema
 from typing import Annotated
 from pydantic import UUID4, Field
 

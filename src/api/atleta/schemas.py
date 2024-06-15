@@ -1,10 +1,10 @@
 from typing import Annotated, Any, Optional
 from pydantic import Field, PositiveFloat
 
-from workoutapi.categoria.models import CategoriaModel
-from workoutapi.categoria.schemas import CategoriaIn
-from workoutapi.centro_treinamento.schemas import CentroTreinamentoAtleta
-from workoutapi.contrib.schemas import BaseSchema, OutMixin
+from api.categoria.models import CategoriaModel
+from api.categoria.schemas import CategoriaIn
+from api.centro_treinamento.schemas import CentroTreinamentoAtleta
+from api.contrib.schemas import BaseSchema, OutMixin
 
 
 class Atleta(BaseSchema):

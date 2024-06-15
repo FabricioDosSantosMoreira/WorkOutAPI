@@ -7,11 +7,11 @@ from sqlalchemy.exc import IntegrityError
 
 from datetime import datetime, UTC
 from pydantic import UUID4
-from workoutapi.atleta.models import AtletaModel
-from workoutapi.atleta.schemas import AtletaIn, AtletaOut, AtletaUpdate, AtletaGetAll
-from workoutapi.categoria.models import CategoriaModel
-from workoutapi.centro_treinamento.models import CentroTreinamentoModel
-from workoutapi.contrib.dependencies import DataBaseDependency
+from api.atleta.models import AtletaModel
+from api.atleta.schemas import AtletaIn, AtletaOut, AtletaUpdate, AtletaGetAll
+from api.categoria.models import CategoriaModel
+from api.centro_treinamento.models import CentroTreinamentoModel
+from api.contrib.dependencies import DataBaseDependency
 
 from sqlalchemy.future import select
 from fastapi_pagination.ext.sqlalchemy import paginate
