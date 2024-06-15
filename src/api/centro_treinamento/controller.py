@@ -47,6 +47,7 @@ async def query(id: UUID4, db_session: DataBaseDependency) -> CentroTreinamentoO
             detail=f"Centro de treinamento não encontrado no Id: {id}",
         )
 
+
     return result
 
 
@@ -85,6 +86,7 @@ async def post(
             detail=f"Ocorreu um erro ao inserir no banco de dados",
         )
 
+
     return centro_treinamento_out
 
 
@@ -117,6 +119,7 @@ async def query(
     await db_session.commit()
     await db_session.refresh(result)
 
+
     return result
 
 
@@ -147,5 +150,6 @@ async def query(id: UUID4, db_session: DataBaseDependency) -> None:
             status_code=status.HTTP_409_CONFLICT,
             detail="Impossível deletar um centro de treinamento que está relacionado a um atleta",
         )
+
 
     return None
