@@ -35,7 +35,6 @@ async def query(id: UUID4, db_session: DataBaseDependency) -> CategoriaOut:
     query = select(CategoriaModel).filter_by(id=id)
 
     result: CategoriaOut = (await db_session.execute(query)).scalars().first()
-
     if not result:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -93,7 +92,6 @@ async def query(
     query = select(CategoriaModel).filter_by(id=id)
 
     result: CategoriaOut = (await db_session.execute(query)).scalars().first()
-
     if not result:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -120,7 +118,6 @@ async def query(id: UUID4, db_session: DataBaseDependency) -> None:
     query = select(CategoriaModel).filter_by(id=id)
 
     result: CategoriaOut = (await db_session.execute(query)).scalars().first()
-
     if not result:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

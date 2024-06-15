@@ -40,7 +40,6 @@ async def query(id: UUID4, db_session: DataBaseDependency) -> CentroTreinamentoO
     query = select(CentroTreinamentoModel).filter_by(id=id)
 
     result: CentroTreinamentoOut = (await db_session.execute(query)).scalars().first()
-
     if not result:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -103,7 +102,6 @@ async def query(
     query = select(CentroTreinamentoModel).filter_by(id=id)
 
     result: CentroTreinamentoOut = (await db_session.execute(query)).scalars().first()
-
     if not result:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -130,7 +128,6 @@ async def query(id: UUID4, db_session: DataBaseDependency) -> None:
     query = select(CentroTreinamentoModel).filter_by(id=id)
 
     result: CentroTreinamentoOut = (await db_session.execute(query)).scalars().first()
-
     if not result:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
