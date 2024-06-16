@@ -30,11 +30,11 @@ poetry install
 
 ### 🔹 Configure o Postgres:
 Crie um novo banco de dados localmente usando o `Postgres`, ele deve conter:
-- Usuário: postgres;
-- Senha: 123456;
-- Nome: workout;
-- Host: localhost;
-- Porta: 5432.
+- Usuário `postgres`;
+- Senha `123456`;
+- Nome `workout`;
+- Host `localhost`;
+- Porta `5432`.
 
 Ou, se preferir edite as váriaveis em `configs/settings.py`.
 
